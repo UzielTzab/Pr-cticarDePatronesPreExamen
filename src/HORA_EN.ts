@@ -1,20 +1,24 @@
-class HoraEn {
-    hour: string = "";
-    cIty: string = "";
+class HoraEn extends Observador {
+    private ciudad: string;
+    private diferenciaHoraria: number;
+    private reloj: Reloj;
 
+    constructor(ciudad: string, diferenciaHoraria: number, reloj: Reloj) {
+        super();
+        if (diferenciaHoraria < -12 || diferenciaHoraria > 12) {
+            throw new Error("La diferencia horaria debe estar entre -12 y 12");
+        }
 
-    GetCityHour(nameOfCity: string): string {
-        const dateCity = new Date();
-        const TimeIn = dateCity.getTimezoneOffset
-
-        return "";
+        this.ciudad = ciudad;
+        this.diferenciaHoraria = diferenciaHoraria;
+        this.reloj = reloj;
+        this.reloj.agregarObservador(this);
     }
 
-    ShowHour(): string {
-        return "";
-
+    actualizar(): void {
+        const fechaLocal = this.reloj.getFecha();
+        const fechaAjustada = new Date(fechaLocal.getTime() + this.diferenciaHoraria * 60 * 60 * 1000);
+        const hora = fechaAjustada.toTimeString().split(" ")[0]; // Obtener solo HH:mm:ss
+        console.log(`${this.ciudad}, ${hora}`);
     }
-
 }
-
-export default HoraEn;
